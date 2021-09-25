@@ -8,16 +8,18 @@
     <p id="display-state"></p>
     <p id="display-entangelment"></p>
     <button id="button" onClick="onButtonClick()">Regenerate state</button>
+    <button id="ans-entangled" onClick="answer(true)">Entangled!</button>
+    <button id="ans-separable" onClick="answer(false)">Not entangled!</button>
 
     <script>
         // importing parts we need from Quantum Tensors
         const { Cx, Vector, Entanglement, Dimension } = QuantumTensors;
 
         let state = Vector.fromSparseCoordNames([
-            ['00', Cx(1)],
-            ['01', Cx(1)],
-            ['10', Cx(-1)],
-            ['11', Cx(1)]], Dimension.qubits(2)).normalize();
+            ['00', Cx(0.5)],
+            ['01', Cx(0.5)],
+            ['10', Cx(-0.5)],
+            ['11', Cx(0.5)]], Dimension.qubits(2));
 
         const displayState = document.getElementById('display-state');
         const displayEntanglement = document.getElementById('display-entangelment');
@@ -41,6 +43,14 @@
             }
             updateViewer();
         };
+
+        const answer = (entangled) => {
+            if (Entanglement.renyi2(state, [0]).toFixed(3) > 0.001) {
+                alert("You are entangled!");
+            } else {
+                alert("You are not entangled!");
+            }
+        }
 
     </script>
 </body>
