@@ -1,0 +1,46 @@
+<head>
+    <title>A simple game in one file</title>
+    <script src="https://unpkg.com/quantum-tensors@0.4.15/dist/quantum-tensors.min.js"></script>
+</head>
+
+<body>
+    <h1>A simple game in one file</h1>
+    <p id="display-state"></p>
+    <p id="display-entangelment"></p>
+    <button id="button" onClick="onButtonClick()">Regenerate state</button>
+
+    <script>
+        // importing parts we need from Quantum Tensors
+        const { Cx, Vector, Entanglement, Dimension } = QuantumTensors;
+
+        let state = Vector.fromSparseCoordNames([
+            ['00', Cx(1)],
+            ['01', Cx(1)],
+            ['10', Cx(-1)],
+            ['11', Cx(1)]], Dimension.qubits(2)).normalize();
+
+        const displayState = document.getElementById('display-state');
+        const displayEntanglement = document.getElementById('display-entangelment');
+
+        const updateViewer = () => {
+            displayState.innerHTML = state.toKetString();
+            displayEntanglement.innerHTML = Entanglement.renyi2(state, [0]).toFixed(3);
+        };
+
+        updateViewer();
+
+        const onButtonClick = () => {
+            console.log("Button clicked!");
+            const r = Math.random();
+            if (r < 0.5) {
+                const qubit1 = Vector.random(Dimension.qubits(1));
+                const qubit2 = Vector.random(Dimension.qubits(1));
+                state = qubit1.outer(qubit2);
+            } else {
+                state = Vector.random(Dimension.qubits(2));
+            }
+            updateViewer();
+        };
+
+    </script>
+</body>
