@@ -7,40 +7,86 @@
     <h1>A simple game in one file</h1>
     <p id="display-state"></p>
     <p id="display-entangelment"></p>
-    <button id="button" onClick="onButtonClick()">Regenerate state</button>
+    <button id="ans-entangled" onClick="answer(true)">Entangled!</button>
+    <button id="ans-separable" onClick="answer(false)">Not entangled!</button>
+    <p id="score"></p>
+    <p id="runs"></p>
 
     <script>
         // importing parts we need from Quantum Tensors
         const { Cx, Vector, Entanglement, Dimension } = QuantumTensors;
 
+        let score = 0;
+        let runs = 0;
+
         let state = Vector.fromSparseCoordNames([
-            ['00', Cx(1)],
-            ['01', Cx(1)],
-            ['10', Cx(-1)],
-            ['11', Cx(1)]], Dimension.qubits(2)).normalize();
+            ['00', Cx(0.5)],
+            ['01', Cx(0.5)],
+            ['10', Cx(-0.5)],
+            ['11', Cx(0.5)]], Dimension.qubits(2));
 
         const displayState = document.getElementById('display-state');
         const displayEntanglement = document.getElementById('display-entangelment');
+        const displayScore = document.getElementById('score');
+        const displayRuns = document.getElementById('runs');
 
         const updateViewer = () => {
-            displayState.innerHTML = state.toKetString();
+            displayState.innerHTML = state.toKetString('cartesian');
             displayEntanglement.innerHTML = Entanglement.renyi2(state, [0]).toFixed(3);
+            displayScore.innerHTML = `Score: ${score}`;
+            displayRuns.innerHTML = `Runs: ${runs}`;
         };
 
         updateViewer();
 
+        const random3 = () => {
+            const r = Math.random();
+            if (r < 0.33) {
+                return Cx(-1)
+            } else if (r < 0.66) {
+                return Cx(0)
+            } else {
+                return Cx(1)
+            }
+        }
+
         const onButtonClick = () => {
             console.log("Button clicked!");
-            const r = Math.random();
-            if (r < 0.5) {
-                const qubit1 = Vector.random(Dimension.qubits(1));
-                const qubit2 = Vector.random(Dimension.qubits(1));
-                state = qubit1.outer(qubit2);
-            } else {
-                state = Vector.random(Dimension.qubits(2));
-            }
+            // const r = Math.random();
+            // if (r < 0.5) {
+            //     const qubit1 = Vector.random(Dimension.qubits(1));
+            //     const qubit2 = Vector.random(Dimension.qubits(1));
+            //     state = qubit1.outer(qubit2);
+            // } else {
+            //     state = Vector.random(Dimension.qubits(2));
+            // }
             updateViewer();
         };
+
+        const answer = (guess) => {
+            const entangled = Entanglement.renyi2(state, [0]).toFixed(3) > 0.001;
+            if (entangled === guess) {
+                alert("You are right! :)");
+                score += 1;
+            } else {
+                alert("You are wrong! :(");
+            }
+            runs += 1;
+            // const r = Math.random();
+            // if (r < 0.5) {
+            //     const qubit1 = Vector.random(Dimension.qubits(1));
+            //     const qubit2 = Vector.random(Dimension.qubits(1));
+            //     state = qubit1.outer(qubit2);
+            // } else {
+            //     state = Vector.random(Dimension.qubits(2));
+            // }
+            state = Vector.fromSparseCoordNames([
+                ['00', random3()],
+                ['01', random3()],
+                ['10', random3()],
+                ['11', random3()]], Dimension.qubits(2)).normalize();
+            updateViewer();
+        }
 
     </script>
 </body>
