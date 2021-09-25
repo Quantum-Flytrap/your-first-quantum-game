@@ -6,7 +6,7 @@ Workshop **Create your first quantum game in JavaScript** by [Piotr Migdał](htt
 
 ## Setup
 
-You need git and GitHub account.
+You need [git](https://git-scm.com/s) and [GitHub](https://github.com/) account.
 We strongly recommend to use the [Visual Studio Code](https://code.visualstudio.com/) editor - powerful, easy-to-use, good support of JavaScript, free. 
 
 To get files on your computer, first FORK this repository, then:
@@ -14,6 +14,12 @@ To get files on your computer, first FORK this repository, then:
 ```{bash}
 git clone git@github.com:YOUR_USERNAME/your-first-quantum-game.git
 ```
+
+To test it just open in a browser the HTML file.
+
+To publish YOUR game, click your reposotiory SETTINGS then PAGES.
+
+For example, this main one is <https://quantum-flytrap.github.io/your-first-quantum-game/simple.html>.
 
 ## What's that
 
