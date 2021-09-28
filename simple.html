@@ -66,10 +66,10 @@
         const answer = (guess) => {
             const entangled = Entanglement.renyi2(state, [0]).toFixed(3) > 0.001;
             if (entangled === guess) {
-                alert("You are right! :)");
+                console.log("You are right! :)");
                 score += 1;
             } else {
-                alert("You are wrong! :(");
+                console.log("You are wrong! :(");
             }
             runs += 1;
             // const r = Math.random();
